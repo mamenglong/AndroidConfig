@@ -19,81 +19,80 @@ import kotlin.reflect.KProperty
  * Package: com.mml.androidconfig.config
  * Project: AndroidConfig
  */
-object SharedPreferenceDelegates {
-    var spName: String = ""
+class SharedPreferenceDelegates(spName: String = "") {
     var preferences: SharedPreferences = if (spName.isEmpty()) {
         PreferenceManager.getDefaultSharedPreferences(ConfigApplication.sContext)
     } else {
         ConfigApplication.sContext!!.getSharedPreferences(spName, Context.MODE_PRIVATE)
     }
 
-    fun int(defaultValue: Int = 0) = object : ReadWriteProperty<SharedPreferenceDelegates, Int> {
+    fun int(defaultValue: Int = 0) = object : ReadWriteProperty<Any, Int> {
 
-        override fun getValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>): Int {
-            return thisRef.preferences.getInt(property.name, defaultValue)
+        override fun getValue(thisRef: Any, property: KProperty<*>): Int {
+            return  preferences.getInt(property.name, defaultValue)
         }
 
-        override fun setValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>, value: Int) {
-            thisRef.preferences.edit().putInt(property.name, value).apply()
-        }
-    }
-
-    fun long(defaultValue: Long = 0L) = object : ReadWriteProperty<SharedPreferenceDelegates, Long> {
-
-        override fun getValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>): Long {
-            return thisRef.preferences.getLong(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>, value: Long) {
-            thisRef.preferences.edit().putLong(property.name, value).apply()
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) {
+             preferences.edit().putInt(property.name, value).apply()
         }
     }
 
-    fun boolean(defaultValue: Boolean = false) = object : ReadWriteProperty<SharedPreferenceDelegates, Boolean> {
-        override fun getValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>): Boolean {
-            return thisRef.preferences.getBoolean(property.name, defaultValue)
+    fun long(defaultValue: Long = 0L) = object : ReadWriteProperty<Any, Long> {
+
+        override fun getValue(thisRef: Any, property: KProperty<*>): Long {
+            return preferences.getLong(property.name, defaultValue)
         }
 
-        override fun setValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>, value: Boolean) {
-            thisRef.preferences.edit().putBoolean(property.name, value).apply()
-        }
-    }
-
-    fun float(defaultValue: Float = 0.0f) = object : ReadWriteProperty<SharedPreferenceDelegates, Float> {
-        override fun getValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>): Float {
-            return thisRef.preferences.getFloat(property.name, defaultValue)
-        }
-
-        override fun setValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>, value: Float) {
-            thisRef.preferences.edit().putFloat(property.name, value).apply()
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Long) {
+            preferences.edit().putLong(property.name, value).apply()
         }
     }
 
-    fun string(defaultValue: String? = null) = object : ReadWriteProperty<SharedPreferenceDelegates, String?> {
-        override fun getValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>): String? {
-            return thisRef.preferences.getString(property.name, defaultValue)
+    fun boolean(defaultValue: Boolean = false) = object : ReadWriteProperty<Any, Boolean> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Boolean {
+            return preferences.getBoolean(property.name, defaultValue)
         }
 
-        override fun setValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>, value: String?) {
-            thisRef.preferences.edit().putString(property.name, value).apply()
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Boolean) {
+            preferences.edit().putBoolean(property.name, value).apply()
+        }
+    }
+
+    fun float(defaultValue: Float = 0.0f) = object : ReadWriteProperty<Any, Float> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): Float {
+            return preferences.getFloat(property.name, defaultValue)
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Float) {
+            preferences.edit().putFloat(property.name, value).apply()
+        }
+    }
+
+    fun string(defaultValue: String? = null) = object : ReadWriteProperty<Any, String?> {
+        override fun getValue(thisRef: Any, property: KProperty<*>): String? {
+            return preferences.getString(property.name, defaultValue)
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: String?) {
+            preferences.edit().putString(property.name, value).apply()
         }
     }
 
     fun setString(defaultValue: Set<String>? = null) =
-        object : ReadWriteProperty<SharedPreferenceDelegates, Set<String>?> {
-            override fun getValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>): Set<String>? {
-                return thisRef.preferences.getStringSet(property.name, defaultValue)
+        object : ReadWriteProperty<Any, Set<String>?> {
+            override fun getValue(thisRef: Any, property: KProperty<*>): Set<String>? {
+                return preferences.getStringSet(property.name, defaultValue)
             }
 
-            override fun setValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>, value: Set<String>?) {
-                thisRef.preferences.edit().putStringSet(property.name, value).apply()
+            override fun setValue(thisRef: Any, property: KProperty<*>, value: Set<String>?) {
+                preferences.edit().putStringSet(property.name, value).apply()
             }
         }
 
     fun Any(defaultValue: String? = null) =
-        object : ReadWriteProperty<SharedPreferenceDelegates, Any?> {
-            override fun getValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>): Any? {
-                val str = thisRef.preferences.getString(property.name, defaultValue)
+        object : ReadWriteProperty<Any, Any?> {
+            override fun getValue(thisRef: Any, property: KProperty<*>): Any? {
+                val str = preferences.getString(property.name, defaultValue)
                 val redStr = java.net.URLDecoder.decode(str, "UTF-8")
                 val byteArrayInputStream = ByteArrayInputStream(
                     redStr.toByteArray(charset("ISO-8859-1"))
@@ -107,7 +106,7 @@ object SharedPreferenceDelegates {
                 return obj
             }
 
-            override fun setValue(thisRef: SharedPreferenceDelegates, property: KProperty<*>, any: Any?) {
+            override fun setValue(thisRef: Any, property: KProperty<*>, any: Any?) {
                 val byteArrayOutputStream = ByteArrayOutputStream()
                 val objectOutputStream = ObjectOutputStream(
                     byteArrayOutputStream
@@ -117,7 +116,7 @@ object SharedPreferenceDelegates {
                 serStr = java.net.URLEncoder.encode(serStr, "UTF-8")
                 objectOutputStream.close()
                 byteArrayOutputStream.close()
-                thisRef.preferences.edit().putString(property.name, serStr).apply()
+                preferences.edit().putString(property.name, serStr).apply()
             }
         }
 }

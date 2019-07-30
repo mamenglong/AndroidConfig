@@ -12,7 +12,7 @@ import com.mml.androidconfig.config.SharedPreferenceDelegates
  */
 class Config:IConfig {
 
-    var num:Int by SharedPreferenceDelegates.int(0)
+    var num:Int by SharedPreferenceDelegates().int(0)
     override fun get(key:String) {
 
     }
