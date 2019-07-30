@@ -25,7 +25,19 @@ class SharedPreferenceDelegates(spName: String = "") {
     } else {
         ConfigApplication.sContext!!.getSharedPreferences(spName, Context.MODE_PRIVATE)
     }
+    /**
+     * 删除全部数据
+     */
+    fun clearPreference(){
+        preferences.edit().clear().apply()
+    }
 
+    /**
+     * 根据key删除存储数据
+     */
+    fun clearPreference(key : String){
+        preferences.edit().remove(key).apply()
+    }
     fun int(defaultValue: Int = 0) = object : ReadWriteProperty<Any, Int> {
 
         override fun getValue(thisRef: Any, property: KProperty<*>): Int {

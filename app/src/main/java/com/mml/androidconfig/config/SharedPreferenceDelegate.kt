@@ -1,6 +1,9 @@
 package com.mml.androidconfig.config
 
 import android.content.Context
+import android.content.SharedPreferences
+import androidx.preference.PreferenceManager
+import com.mml.androidconfig.ConfigApplication
 import java.io.*
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -13,11 +16,17 @@ import kotlin.reflect.KProperty
  * Package: com.mml.androidconfig.config
  * Project: AndroidConfig
  */
-class SharedPreferenceDelegate<T>(val context : Context, val name : String, val default : T): ReadWriteProperty<Any?, T> {
+class SharedPreferenceDelegate<T>(var spName:String, val name : String, val default : T): ReadWriteProperty<Any?, T> {
 
-        val prefs by lazy{context.getSharedPreferences("Realnen",Context.MODE_PRIVATE)}
+//        val prefs by lazy{context.getSharedPreferences("Realnen",Context.MODE_PRIVATE)}
 
-
+    val prefs: SharedPreferences  by lazy {
+        if (spName.isEmpty()) {
+            PreferenceManager.getDefaultSharedPreferences(ConfigApplication.sContext)
+        } else {
+            ConfigApplication.sContext!!.getSharedPreferences(spName, Context.MODE_PRIVATE)
+        }
+    }
         override fun getValue(thisRef: Any?, property: KProperty<*>): T {
             return findPreference(name,default)
         }
@@ -60,14 +69,14 @@ class SharedPreferenceDelegate<T>(val context : Context, val name : String, val 
          * 删除全部数据
          */
         fun clearPreference(){
-            prefs.edit().clear().commit()
+            prefs.edit().clear().apply()
         }
 
         /**
          * 根据key删除存储数据
          */
         fun clearPreference(key : String){
-            prefs.edit().remove(key).commit()
+            prefs.edit().remove(key).apply()
         }
 
         /**
