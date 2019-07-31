@@ -1,16 +1,16 @@
-package com.mml.androidconfig
+package com.mml.easyconfig
 
 import android.os.Looper
 import android.widget.Toast
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.mml.androidconfig.ConfigApplication
+import com.mml.easyconfig.ConfigApplication
 
-fun showToast(msg:String)= run {
+fun showToast(msg:String) {
     val looper=Looper.getMainLooper()
     if (looper== Looper.myLooper()){
-            Toast.makeText(ConfigApplication.instances,msg,Toast.LENGTH_SHORT).show()
+            Toast.makeText(com.mml.easyconfig.ConfigApplication.sContext,msg,Toast.LENGTH_SHORT).show()
     }
 }
 fun View.extSetVisibility(visible: Boolean) = if (visible) {

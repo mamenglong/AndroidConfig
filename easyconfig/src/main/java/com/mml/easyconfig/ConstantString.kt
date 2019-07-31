@@ -1,4 +1,4 @@
-package com.mml.topwho
+package com.mml.easyconfig
 
 /**
  * Author: Menglong Ma
@@ -10,7 +10,6 @@ package com.mml.topwho
  */
 object ConstantString {
     //exception
-   const val RUNTIME_ERROR_APPLICATION_IS_NULL="Runtime error : SharedPreferenceDelegates-->请先在自己的Application中初始化ConfigApplication调用init()方法"
     const val RUNTIME_ERROR_APPLICATION_CONTEXT_IS_NULL="Runtime error : ConfigApplication context is null,please initialize it firstly  "
 
 }

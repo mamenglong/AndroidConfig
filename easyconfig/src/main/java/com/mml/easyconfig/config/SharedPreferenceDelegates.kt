@@ -1,9 +1,9 @@
-package com.mml.androidconfig.config
+package com.mml.easyconfig.config
 
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
-import com.mml.androidconfig.ConfigApplication
+import com.mml.easyconfig.ConfigApplication
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -60,6 +60,16 @@ class SharedPreferenceDelegates(spName: String = "") {
         }
     }
 
+    fun double(defaultValue: Double = 0.0) = object : ReadWriteProperty<Any, Double> {
+
+        override fun getValue(thisRef: Any, property: KProperty<*>): Double {
+            return preferences.getString(property.name, defaultValue.toString())?.toDouble()?:defaultValue
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: Double) {
+            preferences.edit().putString(property.name, value.toString()).apply()
+        }
+    }
     fun boolean(defaultValue: Boolean = false) = object : ReadWriteProperty<Any, Boolean> {
         override fun getValue(thisRef: Any, property: KProperty<*>): Boolean {
             return preferences.getBoolean(property.name, defaultValue)
