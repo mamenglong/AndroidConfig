@@ -24,4 +24,5 @@ abstract class Config{
     protected fun long(key: Int) = delegate.long(0L)
     protected fun string(key: Int) = delegate.string()
     protected fun set(key: Int) = delegate.setString()
+    protected fun any(key:Int)=delegate.Object<Any>()
 }

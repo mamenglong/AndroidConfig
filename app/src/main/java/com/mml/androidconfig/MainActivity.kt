@@ -12,5 +12,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         Config.name="nihao"
         test.text=Config.name
+        Config.user=User("4444")
+        test.text=test.text.toString()+Config.user.toString()
     }
 }

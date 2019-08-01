@@ -21,4 +21,6 @@ object Config: Config() {
         println("spName:$spName")
     }
     var name by string(key = ConfigType.STRING)
+    var user by any(ConfigType.BOOLEAN)
 }
+data class User(var name: String)

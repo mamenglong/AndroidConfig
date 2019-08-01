@@ -3,6 +3,7 @@ package com.mml.easyconfig.config
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.google.gson.Gson
 import com.mml.easyconfig.ConfigApplication
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -10,6 +11,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
+import kotlin.reflect.typeOf
 
 /**
  * Author: Menglong Ma
@@ -141,4 +143,21 @@ class SharedPreferenceDelegates(spName: String = "") {
                 preferences.edit().putString(property.name, serStr).apply()
             }
         }
+    fun<T>Object(defaultValue: T?=null)=object:ReadWriteProperty<Any,T>{
+
+        override fun getValue(thisRef: Any, property: KProperty<*>): T {
+            val str = preferences.getString(property.name, null)
+            return (if (str==null){
+                defaultValue
+            } else {
+                Gson().fromJson(str, property.javaClass)
+            }) as T
+        }
+
+        override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
+            val json= Gson().toJson(value)
+            preferences.edit().putString(property.name, json).apply()
+        }
+
+    }
 }
