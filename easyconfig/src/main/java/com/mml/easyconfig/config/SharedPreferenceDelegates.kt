@@ -160,4 +160,18 @@ class SharedPreferenceDelegates(spName: String = "") {
         }
 
     }
+    inline fun <reified T> json(defaultValue: T, key: String? = null) =
+        object : ReadWriteProperty<Any, T> {
+            private val gson = Gson()
+
+            override fun getValue(thisRef: Any, property: KProperty<*>): T {
+
+                val s = preferences.getString(key ?: property.name, "")
+
+                return if (s!!.isBlank()) defaultValue else gson.fromJson(s, T::class.java)
+            }
+
+            override fun setValue(thisRef: Any, property: KProperty<*>, value: T)  =
+                preferences.edit().putString(key ?: property.name, gson.toJson(value)).apply()
+        }
 }

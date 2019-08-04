@@ -8,6 +8,7 @@
         get() = "NIHAO"
     //定义属性 
     var name by string(key = ConfigType.STRING)
+    var users by json<User?>(null)
 }
  //使用
          Config.name="nihao"

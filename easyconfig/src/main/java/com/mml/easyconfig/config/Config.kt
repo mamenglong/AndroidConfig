@@ -25,4 +25,5 @@ abstract class Config{
     protected fun string(key: Int) = delegate.string()
     protected fun set(key: Int) = delegate.setString()
     protected fun any(key:Int)=delegate.Object<Any>()
+    protected inline fun<reified T> json(default: T,key: String?=null)=delegate.json(default,key)
 }

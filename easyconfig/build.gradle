@@ -40,3 +40,11 @@ dependencies {
 repositories {
     mavenCentral()
 }
+//publish{
+//    userOrg = 'menglong'
+//    groupId = 'com.mml.easyconfig'
+//    artifactId = 'prefs-config'
+//    publishVersion = '1.0.0'
+//    desc = 'this is a prefs delegate library for android'
+//    website = 'https://github.com/mamenglong/AndroidConfig'
+//}

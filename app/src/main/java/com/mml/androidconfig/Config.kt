@@ -22,5 +22,6 @@ object Config: Config() {
     }
     var name by string(key = ConfigType.STRING)
     var user by any(ConfigType.BOOLEAN)
+    var users by json<User?>(null)
 }
 data class User(var name: String)
