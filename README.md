@@ -19,7 +19,7 @@
         - Step 2. Add the dependency
             ```
                 dependencies {
-                        implementation 'com.github.mamenglong.AndroidConfig:spConfig:Tag'
+                        implementation 'com.github.mamenglong:AndroidConfig:Tag'
                 }
             ```    
     - maven
@@ -35,8 +35,8 @@
       -  Step 2. Add the dependency 
           ``` 
           <dependency>
-              <groupId>com.github.mamenglong.AndroidConfig</groupId>
-              <artifactId>spConfig</artifactId>
+              <groupId>com.github.mamenglong</groupId>
+              <artifactId>AndroidConfig</artifactId>
               <version>Tag</version>
           </dependency>
           ```
@@ -66,26 +66,25 @@
             </application>
             </manifest> 
         ``` 
-That's OK. Utils can still live with that. Just call
+>That's OK. Utils can still live with that. Just call
 EasyUtils.initialize(context) in your own Application: 
- ```java
- public class MyOwnApplication extends Application {
-         
-             @Override
-             public void onCreate() {
-                 super.onCreate();
-                 AndroidConfig.initialize(this);
+    
+  ```java
+     public class MyOwnApplication extends Application {
+             
+                 @Override
+                 public void onCreate() {
+                     super.onCreate();
+                     AndroidConfig.initialize(this);
+                 }
              }
-         }
- ```
+  ```
   Make sure to call this method as early as you can. In the
  onCreate() method of Application will be fine. And always remember to
  use the application context as parameter. Do not use any instance of
  activity or service as parameter, or memory leaks might happen.
 
 - 介绍 
-
-项目包括两个主要模块：android，java 
 
 * 使用方式
  + 第一种，继承方式
@@ -103,11 +102,11 @@ EasyUtils.initialize(context) in your own Application:
             test.text=Config.name
     ```
  + 第二种，直接使用
- ```kotlin
- //定义
-  var aa by SharedPreferenceDelegate(spName = "test",default = 0)
-  var ss by SharedPreferenceDelegate.json<User?>(null,"asad")
- //使用
- aa="sss"
- ss=User("name")
- ```
+     ```kotlin
+     //定义
+      var aa by SharedPreferenceDelegate(spName = "test",default = 0)
+      var ss by SharedPreferenceDelegate.json<User?>(null,"asad")
+     //使用
+     aa="sss"
+     ss=User("name")
+     ```

@@ -15,7 +15,6 @@ abstract class Config{
     init {
         println("spName:$spName")
         delegate= SharedPreferenceDelegates(spName)
-
     }
     protected fun boolean(key: Int) = delegate.boolean(false)
     protected fun int(key: Int) = delegate.int(0)
