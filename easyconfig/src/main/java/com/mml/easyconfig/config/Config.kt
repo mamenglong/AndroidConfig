@@ -10,11 +10,18 @@ package com.mml.easyconfig.config
  * Project: Test
  */
 abstract class Config{
+    /**
+     * share preference名字
+     */
    abstract val spName:String
+    /**
+     * 是否启用加密
+     */
+    abstract val isEncode:Boolean
     val delegate: SharedPreferenceDelegates
     init {
         println("spName:$spName")
-        delegate= SharedPreferenceDelegates(spName)
+        delegate= SharedPreferenceDelegates(spName,isEncode)
     }
     protected fun boolean(key: Int) = delegate.boolean(false)
     protected fun int(key: Int) = delegate.int(0)

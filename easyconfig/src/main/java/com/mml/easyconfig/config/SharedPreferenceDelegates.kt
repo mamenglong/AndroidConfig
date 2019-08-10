@@ -5,6 +5,7 @@ import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.mml.easyconfig.ConfigApplication
+import com.mml.easyconfig.util.AESUtils
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -21,33 +22,35 @@ import kotlin.reflect.typeOf
  * Package: com.mml.androidconfig.config
  * Project: AndroidConfig
  */
-class SharedPreferenceDelegates(spName: String = "") {
+class SharedPreferenceDelegates(spName: String = "", val isEncode: Boolean = false) {
     var preferences: SharedPreferences = if (spName.isEmpty()) {
         PreferenceManager.getDefaultSharedPreferences(ConfigApplication.sContext)
     } else {
         ConfigApplication.sContext!!.getSharedPreferences(spName, Context.MODE_PRIVATE)
     }
+
     /**
      * 删除全部数据
      */
-    fun clearPreference(){
+    fun clearPreference() {
         preferences.edit().clear().apply()
     }
 
     /**
      * 根据key删除存储数据
      */
-    fun clearPreference(key : String){
+    fun clearPreference(key: String) {
         preferences.edit().remove(key).apply()
     }
+
     fun int(defaultValue: Int = 0) = object : ReadWriteProperty<Any, Int> {
 
         override fun getValue(thisRef: Any, property: KProperty<*>): Int {
-            return  preferences.getInt(property.name, defaultValue)
+            return preferences.getInt(property.name, defaultValue)
         }
 
         override fun setValue(thisRef: Any, property: KProperty<*>, value: Int) {
-             preferences.edit().putInt(property.name, value).apply()
+                preferences.edit().putInt(property.name, value).apply()
         }
     }
 
@@ -65,13 +68,14 @@ class SharedPreferenceDelegates(spName: String = "") {
     fun double(defaultValue: Double = 0.0) = object : ReadWriteProperty<Any, Double> {
 
         override fun getValue(thisRef: Any, property: KProperty<*>): Double {
-            return preferences.getString(property.name, defaultValue.toString())?.toDouble()?:defaultValue
+            return preferences.getString(property.name, defaultValue.toString())?.toDouble() ?: defaultValue
         }
 
         override fun setValue(thisRef: Any, property: KProperty<*>, value: Double) {
             preferences.edit().putString(property.name, value.toString()).apply()
         }
     }
+
     fun boolean(defaultValue: Boolean = false) = object : ReadWriteProperty<Any, Boolean> {
         override fun getValue(thisRef: Any, property: KProperty<*>): Boolean {
             return preferences.getBoolean(property.name, defaultValue)
@@ -143,11 +147,12 @@ class SharedPreferenceDelegates(spName: String = "") {
                 preferences.edit().putString(property.name, serStr).apply()
             }
         }
-    fun<T>Object(defaultValue: T?=null)=object:ReadWriteProperty<Any,T>{
+
+    fun <T> Object(defaultValue: T? = null) = object : ReadWriteProperty<Any, T> {
 
         override fun getValue(thisRef: Any, property: KProperty<*>): T {
             val str = preferences.getString(property.name, null)
-            return (if (str==null){
+            return (if (str == null) {
                 defaultValue
             } else {
                 Gson().fromJson(str, property.javaClass)
@@ -155,23 +160,29 @@ class SharedPreferenceDelegates(spName: String = "") {
         }
 
         override fun setValue(thisRef: Any, property: KProperty<*>, value: T) {
-            val json= Gson().toJson(value)
+            val json = Gson().toJson(value)
             preferences.edit().putString(property.name, json).apply()
         }
 
     }
+
     inline fun <reified T> json(defaultValue: T, key: String? = null) =
         object : ReadWriteProperty<Any, T> {
             private val gson = Gson()
 
             override fun getValue(thisRef: Any, property: KProperty<*>): T {
 
-                val s = preferences.getString(key ?: property.name, "")
-
-                return if (s!!.isBlank()) defaultValue else gson.fromJson(s, T::class.java)
+                var s = preferences.getString(key ?: property.name, "")
+                return if (s!!.isBlank()) defaultValue else {
+                    if (isEncode) gson.fromJson(AESUtils.decrypt(s), T::class.java)
+                    else gson.fromJson(s, T::class.java)
+                }
             }
 
-            override fun setValue(thisRef: Any, property: KProperty<*>, value: T)  =
-                preferences.edit().putString(key ?: property.name, gson.toJson(value)).apply()
+            override fun setValue(thisRef: Any, property: KProperty<*>, value: T) =
+                if (isEncode)
+                    preferences.edit().putString(property.name, AESUtils.encrypt(gson.toJson(value))).apply()
+                else
+                    preferences.edit().putString(key ?: property.name, gson.toJson(value)).apply()
         }
 }
