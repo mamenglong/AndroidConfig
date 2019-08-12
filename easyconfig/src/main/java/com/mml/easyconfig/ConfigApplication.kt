@@ -18,5 +18,11 @@ class ConfigApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         sContext = this
+        AndroidConfig.isInitialized=true
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        AndroidConfig.isInitialized=false
     }
 }

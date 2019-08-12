@@ -85,12 +85,14 @@ EasyUtils.initialize(context) in your own Application:
  activity or service as parameter, or memory leaks might happen.
 
 - 介绍 
-
+  基于kotlin使用委托方式使用sharePreference  
 * 使用方式
  + 第一种，继承方式
     ```kotlin
     //继承 com.mml.easyconfig.config.Config ,实现属性spName的赋值.为空则为默认sharePreference对象
       object Config: Config() {
+       override val isEncode: Boolean
+        get() = true
         override val spName: String
             get() = "NIHAO"
         //定义属性 

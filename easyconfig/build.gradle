@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 project.archivesBaseName ='spConfig'
+group = 'com.mml.EasyConfig'
+version = 'v1.0'
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
@@ -41,11 +43,3 @@ dependencies {
 repositories {
     mavenCentral()
 }
-//publish{
-//    userOrg = 'menglong'
-//    groupId = 'com.mml.easyconfig'
-//    artifactId = 'prefs-config'
-//    publishVersion = '1.0.0'
-//    desc = 'this is a prefs delegate library for android'
-//    website = 'https://github.com/mamenglong/AndroidConfig'
-//}

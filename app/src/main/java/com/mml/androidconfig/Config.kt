@@ -13,6 +13,8 @@ import com.mml.easyconfig.config.SharedPreferenceDelegates
  * Project: AndroidConfig
  */
 object Config: Config() {
+    override val isEncode: Boolean
+        get() = true
     override val spName: String
         get() = "NIHAO"
 

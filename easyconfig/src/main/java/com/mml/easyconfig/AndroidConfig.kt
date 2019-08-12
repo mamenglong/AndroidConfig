@@ -26,5 +26,8 @@ object AndroidConfig {
     @JvmStatic
     fun initialize(context: Context) {
         ConfigApplication.sContext = context
+        isInitialized=true
     }
+    @JvmField
+    var isInitialized =false
 }
